@@ -1,0 +1,22 @@
+{
+  "build": "0.7.2.1",
+  "created": "2026-01-14",
+  "player": {
+    "health": "0x1A2B3C40",
+    "stamina": "0x1A2B3C48",
+    "mana": "0x1A2B3C50",
+    "position_x": "0x1A2B3D00",
+    "position_y": "0x1A2B3D04",
+    "position_z": "0x1A2B3D08"
+  },
+  "inventory": {
+    "base": "0x1B00A000",
+    "slot_size": 64,
+    "slot_count": 40
+  },
+  "entity_list": {
+    "head": "0x1C00E100",
+    "stride": 0x1F0,
+    "count_offset": 0x0C
+  }
+}
