@@ -1,0 +1,1 @@
+"""Bundled Enshrouded trainer plugins."""
