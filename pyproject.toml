@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "enshrouded-trainer"
+version = "2.4.1"
+description = "Plugin-host Enshrouded trainer: cheat overlay, ESP, aimbot, inventory editor"
+requires-python = ">=3.10"
+authors = [{name = "enshrouded-trainer contributors"}]
+
+[tool.setuptools.packages.find]
+include = ["trainer_host*", "plugins*", "contracts*"]
