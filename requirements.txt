@@ -1,0 +1,9 @@
+# enshrouded-trainer runtime dependencies
+pywin32>=306
+pymem>=1.13.0
+requests>=2.31.0
+pyyaml>=6.0.1
+rich>=13.7.0
+pydantic>=2.6.0
+keyboard>=0.13.5
+colorama>=0.4.6
