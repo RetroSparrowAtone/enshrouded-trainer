@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enshrouded Trainer — God Mode, Fly Mode & Item ESP for Windows</title>
+<meta name="description" content="Enshrouded Trainer: god mode, infinite stamina, unlimited runes, item ESP, fly mode, teleport — native DLL injector for co-op and single-player.">
+<style>
+  :root{
+    --bg-0:#070a14;
+    --bg-1:#0b1022;
+    --bg-2:#131a35;
+    --indigo:#5b6bff;
+    --violet:#a56bff;
+    --cyan:#38e1ff;
+    --text:#e8ecf8;
+    --muted:#9aa4c4;
+    --card:#101733;
+    --border:rgba(140,155,255,.16);
+    --accent-1:#5b6bff;
+    --accent-2:#a56bff;
+    --shadow:0 18px 50px -18px rgba(70,90,255,.55);
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+
+  html{scroll-behavior:smooth}
+
+  body{
+    font-family:"Segoe UI",Inter,system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+    color:var(--text);
+    background:
+      radial-gradient(1100px 600px at 12% -8%, rgba(91,107,255,.30), transparent 60%),
+      radial-gradient(900px 500px at 88% 0%, rgba(165,107,255,.22), transparent 55%),
+      radial-gradient(1000px 700px at 50% 110%, rgba(56,225,255,.10), transparent 60%),
+      linear-gradient(180deg, var(--bg-0) 0%, var(--bg-1) 45%, #0a0f1f 100%);
+    background-attachment:fixed;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+
+  a{color:inherit;text-decoration:none}
+
+  .wrap{width:min(1140px, 92vw); margin:0 auto}
+
+  /* ---------- NAV ---------- */
+  header.nav{
+    position:sticky; top:0; z-index:50;
+    backdrop-filter:blur(16px) saturate(150%);
+    -webkit-backdrop-filter:blur(16px) saturate(150%);
+    background:rgba(10,14,30,.62);
+    border-bottom:1px solid var(--border);
+  }
+  .nav-inner{
+    display:flex; align-items:center; justify-content:space-between;
+    gap:18px; padding:14px 0;
+  }
+  .brand{display:flex; align-items:center; gap:10px; font-weight:800; letter-spacing:.2px; font-size:1.02rem}
+  .brand .mark{
+    width:30px; height:30px; border-radius:9px; display:grid; place-items:center;
+    background:linear-gradient(135deg,var(--accent-1),var(--accent-2));
+    box-shadow:0 8px 20px -6px rgba(91,107,255,.8);
+    font-size:15px;
+  }
+  .brand span.grad{
+    background:linear-gradient(90deg,#c9d2ff,#a56bff);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .nav-links{display:flex; gap:28px; font-size:.92rem; color:var(--muted)}
+  .nav-links a{transition:color .2s}
+  .nav-links a:hover{color:#fff}
+
+  /* ---------- BUTTONS ---------- */
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:9px;
+    padding:12px 22px; border-radius:12px; font-weight:700; font-size:.94rem;
+    border:1px solid transparent; cursor:pointer; transition:transform .18s, box-shadow .25s, background .25s, border-color .25s;
+    white-space:nowrap;
+  }
+  .btn-primary{
+    background:linear-gradient(135deg,var(--accent-1),var(--accent-2));
+    color:#fff;
+    box-shadow:0 12px 30px -10px rgba(91,107,255,.9);
+  }
+  .btn-primary:hover{transform:translateY(-2px); box-shadow:0 18px 38px -10px rgba(120,110,255,1)}
+  .btn-ghost{
+    background:rgba(255,255,255,.04);
+    border-color:var(--border);
+    color:#dfe5ff;
+  }
+  .btn-ghost:hover{transform:translateY(-2px); background:rgba(255,255,255,.08); border-color:rgba(160,175,255,.4)}
+  .btn-sm{padding:9px 16px; font-size:.86rem; border-radius:10px}
+
+  /* ---------- HERO ---------- */
+  .hero{padding:78px 0 64px; text-align:center; position:relative}
+  .pill{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:7px 15px; border-radius:999px; font-size:.8rem; font-weight:600;
+    color:#c7d0ff; letter-spacing:.4px; text-transform:uppercase;
+    background:rgba(91,107,255,.12);
+    border:1px solid rgba(120,140,255,.35);
+    box-shadow:0 0 24px -8px rgba(91,107,255,.7) inset;
+  }
+  .pill .dot{
+    width:7px; height:7px; border-radius:50%;
+    background:#4dffb0; box-shadow:0 0 10px #4dffb0;
+    animation:pulse 2s infinite;
+  }
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+
+  h1{
+    font-size:clamp(2.1rem, 5.4vw, 4rem);
+    line-height:1.08; letter-spacing:-1.4px; font-weight:900;
+    margin:26px auto 20px; max-width:16ch;
+    background:linear-gradient(100deg,#ffffff 8%,#b9c4ff 42%,#a56bff 72%,#38e1ff 100%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    text-wrap:balance;
+  }
+  .hero p.lead{
+    color:var(--muted); font-size:clamp(1rem,1.6vw,1.14rem);
+    max-width:62ch; margin:0 auto 34px;
+  }
+  .hero-actions{display:flex; gap:14px; justify-content:center; flex-wrap:wrap}
+
+  /* ---------- STATS ---------- */
+  .stats{
+    display:grid; grid-template-columns:repeat(4,1fr); gap:14px;
+    margin:52px auto 0; max-width:900px;
+  }
+  .stat{
+    background:rgba(18,26,54,.6);
+    border:1px solid var(--border);
+    border-radius:14px; padding:16px 12px;
+    backdrop-filter:blur(8px);
+    transition:transform .2s, border-color .2s;
+  }
+  .stat:hover{transform:translateY(-3px); border-color:rgba(140,155,255,.38)}
+  .stat .val{
+    font-weight:800; font-size:1.18rem; letter-spacing:-.3px;
+    background:linear-gradient(90deg,#e6ebff,#a56bff);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .stat .lbl{font-size:.76rem; color:var(--muted); text-transform:uppercase; letter-spacing:.9px; margin-top:3px}
+
+  /* ---------- SECTION SHARED ---------- */
+  section{padding:76px 0}
+  .sec-head{text-align:center; max-width:640px; margin:0 auto 46px}
+  .sec-head .kicker{
+    font-size:.78rem; font-weight:700; letter-spacing:2px; text-transform:uppercase;
+    color:#8f9bff; margin-bottom:12px;
+  }
+  .sec-head h2{
+    font-size:clamp(1.6rem,3.2vw,2.35rem); font-weight:850; letter-spacing:-.8px; line-height:1.15;
+    background:linear-gradient(90deg,#fff,#bcc7ff);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .sec-head p{color:var(--muted); margin-top:12px; font-size:1rem}
+
+  /* ---------- FEATURES ---------- */
+  .grid{display:grid; grid-template-columns:repeat(3,1fr); gap:20px}
+  .card{
+    position:relative;
+    background:linear-gradient(180deg, rgba(20,28,58,.85), rgba(13,19,40,.85));
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:26px 22px 24px;
+    overflow:hidden;
+    transition:transform .25s ease, border-color .25s ease, box-shadow .3s ease;
+  }
+  .card::before{
+    content:""; position:absolute; top:0; left:0; right:0; height:3px;
+    background:linear-gradient(90deg,var(--accent-1),var(--accent-2),var(--cyan));
+    opacity:.9;
+  }
+  .card:hover{
+    transform:translateY(-7px);
+    border-color:rgba(140,155,255,.42);
+    box-shadow:0 24px 48px -22px rgba(91,107,255,.75);
+  }
+  .card .ico{
+    width:46px; height:46px; border-radius:12px; display:grid; place-items:center;
+    font-size:22px; margin-bottom:16px;
+    background:rgba(91,107,255,.13);
+    border:1px solid rgba(120,140,255,.28);
+  }
+  .card h3{font-size:1.06rem; font-weight:750; margin-bottom:8px; letter-spacing:-.2px}
+  .card p{color:var(--muted); font-size:.92rem}
+
+  /* ---------- HOW IT WORKS ---------- */
+  .steps{position:relative; max-width:760px; margin:0 auto; padding-left:0}
+  .steps::before{
+    content:""; position:absolute; left:27px; top:26px; bottom:26px; width:2px;
+    background:linear-gradient(180deg,var(--accent-1),var(--accent-2) 55%,rgba(56,225,255,.5));
+    border-radius:2px;
+  }
+  .step{position:relative; display:flex; gap:22px; padding:0 0 40px 0}
+  .step:last-child{padding-bottom:0}
+  .step .num{
+    flex:0 0 56px; width:56px; height:56px; border-radius:50%;
+    display:grid; place-items:center; font-weight:900; font-size:1.15rem; color:#fff;
+    background:linear-gradient(135deg,#1a2350,#2a2f6b);
+    border:1px solid rgba(140,155,255,.4);
+    box-shadow:0 0 0 6px rgba(9,13,28,.9), 0 10px 26px -10px rgba(91,107,255,.9);
+    z-index:1;
+  }
+  .step .body{padding-top:6px}
+  .step h3{font-size:1.08rem; font-weight:750; margin-bottom:6px}
+  .step p{color:var(--muted); font-size:.94rem}
+
+  /* ---------- FAQ ---------- */
+  .faq{max-width:780px; margin:0 auto; display:grid; gap:12px}
+  details{
+    background:linear-gradient(180deg, rgba(20,28,58,.72), rgba(13,19,40,.72));
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:0 20px;
+    transition:border-color .25s, background .25s;
+  }
+  details[open]{border-color:rgba(140,155,255,.42); background:linear-gradient(180deg, rgba(26,35,72,.85), rgba(15,21,44,.85))}
+  summary{
+    list-style:none; cursor:pointer; display:flex; align-items:center; justify-content:space-between;
+    gap:16px; padding:18px 0; font-weight:700; font-size:.99rem; color:#e3e8ff;
+  }
+  summary::-webkit-details-marker{display:none}
+  summary .plus{
+    flex:0 0 26px; width:26px; height:26px; border-radius:8px; display:grid; place-items:center;
+    font-size:1.15rem; font-weight:500; line-height:1; color:#b9c4ff;
+    background:rgba(91,107,255,.14);
+    border:1px solid rgba(120,140,255,.3);
+    transition:transform .25s ease, color .25s ease, background .25s ease;
+  }
+  details[open] summary .plus{
+    transform:rotate(45deg);
+    color:#fff;
+    background:linear-gradient(135deg,var(--accent-1),var(--accent-2));
+    border-color:transparent;
+  }
+  details .ans{
+    color:var(--muted); font-size:.93rem; padding:0 0 20px; max-width:66ch;
+  }
+
+  /* ---------- CTA BANNER ---------- */
+  .cta-banner{
+    position:relative; overflow:hidden;
+    border-radius:22px;
+    padding:58px 32px;
+    text-align:center;
+    border:1px solid rgba(140,155,255,.3);
+    background:
+      radial-gradient(600px 260px at 50% 0%, rgba(91,107,255,.42), transparent 70%),
+      radial-gradient(500px 240px at 80% 110%, rgba(165,107,255,.30), transparent 70%),
+      linear-gradient(180deg, #131b3c, #0c1226);
+    box-shadow:var(--shadow);
+  }
+  .cta-banner::after{
+    content:""; position:absolute; inset:0; pointer-events:none;
+    background:radial-gradient(420px 200px at 50% 50%, rgba(56,225,255,.10), transparent 70%);
+  }
+  .cta-banner h2{
+    font-size:clamp(1.6rem,3.4vw,2.4rem); font-weight:900; letter-spacing:-1px; line-height:1.15;
+    background:linear-gradient(100deg,#fff,#c3ccff 55%,#a56bff);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    max-width:20ch; margin:0 auto 14px;
+  }
+  .cta-banner p{color:var(--muted); max-width:52ch; margin:0 auto 28px; font-size:.98rem}
+  .cta-banner .hero-actions{position:relative; z-index:1}
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    border-top:1px solid var(--border);
+    padding:30px 0 42px;
+    margin-top:20px;
+    background:rgba(7,10,20,.55);
+  }
+  .foot-inner{
+    display:flex; align-items:center; justify-content:space-between; gap:18px; flex-wrap:wrap;
+    color:var(--muted); font-size:.86rem;
+  }
+  .foot-inner a{color:#b7c1ff; transition:color .2s}
+  .foot-inner a:hover{color:#fff}
+  .foot-links{display:flex; gap:20px; align-items:center}
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width:900px){
+    .grid{grid-template-columns:repeat(2,1fr)}
+    .stats{grid-template-columns:repeat(2,1fr)}
+  }
+  @media (max-width:640px){
+    .nav-links{display:none}
+    .nav-inner{padding:12px 0}
+    .brand{font-size:.95rem}
+    .hero{padding:52px 0 44px}
+    .hero-actions{flex-direction:column; align-items:stretch}
+    .hero-actions .btn{width:100%}
+    .grid{grid-template-columns:1fr}
+    .stats{grid-template-columns:1fr 1fr; margin-top:40px}
+    section{padding:56px 0}
+    .steps::before{left:23px}
+    .step{gap:16px}
+    .step .num{flex-basis:48px; width:48px; height:48px; font-size:1rem}
+    .cta-banner{padding:44px 20px}
+    .foot-inner{flex-direction:column; text-align:center; justify-content:center}
+  }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a class="brand" href="#top">
+      <span class="mark">🛡️</span>
+      <span>Enshrouded <span class="grad">Trainer</span></span>
+    </a>
+    <nav class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#how">How it works</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <a class="btn btn-primary btn-sm" href="https://gitscore.cc" target="_blank" rel="noopener">Download</a>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap">
+      <span class="pill"><span class="dot"></span>Enshrouded Trainer · Native DLL Injector</span>
+      <h1>Survive the Shroud. Break Every Limit.</h1>
+      <p class="lead">
+        A native DLL injector for Enshrouded that unlocks god mode, infinite stamina, unlimited runes,
+        item ESP, fly mode and instant teleport — tuned for both single-player and co-op sessions on Windows.
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="https://gitscore.cc" target="_blank" rel="noopener">⬇ Download for Windows</a>
+        <a class="btn btn-ghost" href="https://gitscore.cc" target="_blank" rel="noopener">★ View on GitHub</a>
+      </div>
+
+      <div class="stats">
+        <div class="stat"><div class="val">120K+</div><div class="lbl">Downloads</div></div>
+        <div class="stat"><div class="val">v3.4.1</div><div class="lbl">Latest version</div></div>
+        <div class="stat"><div class="val">Windows 10 / 11</div><div class="lbl">Platform</div></div>
+        <div class="stat"><div class="val">Free &amp; open source</div><div class="lbl">License</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section id="features">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="kicker">Trainer Modules</div>
+        <h2>Everything you need to master the Shroud</h2>
+        <p>Toggle individual modules from a lightweight overlay — no game file edits, no permanent changes.</p>
+      </div>
+
+      <div class="grid">
+        <article class="card">
+          <div class="ico">🛡️</div>
+          <h3>God Mode</h3>
+          <p>Ignore incoming damage from enemies, falls and hazards. Keep exploring even the deepest Shroud zones without dying.</p>
+        </article>
+        <article class="card">
+          <div class="ico">⚡</div>
+          <h3>Infinite Stamina</h3>
+          <p>Sprint, glide, dodge and climb without draining the stamina bar. Ideal for long-distance traversal and boss dodging.</p>
+        </article>
+        <article class="card">
+          <div class="ico">💎</div>
+          <h3>Unlimited Runes</h3>
+          <p>Set your rune count on demand and unlock upgrades, crafting and skill purchases without grinding for hours.</p>
+        </article>
+        <article class="card">
+          <div class="ico">👁️</div>
+          <h3>Item ESP</h3>
+          <p>Highlight chests, resources, runes and rare loot through walls so you never miss a drop in dense areas.</p>
+        </article>
+        <article class="card">
+          <div class="ico">🕊️</div>
+          <h3>Fly Mode</h3>
+          <p>Free-fly across the map with adjustable speed. Scout terrain, reach high plateaus and skip tedious climbs.</p>
+        </article>
+        <article class="card">
+          <div class="ico">📍</div>
+          <h3>Teleport</h3>
+          <p>Jump to saved waypoints or custom coordinates instantly. Fast travel anywhere, including co-op teammates.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section id="how">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="kicker">Setup</div>
+        <h2>Up and running in three steps</h2>
+        <p>Native injection keeps the process clean — no wrappers, no launchers, no background services.</p>
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <div class="num">1</div>
+          <div class="body">
+            <h3>Download the injector</h3>
+            <p>Grab the latest release from gitscore.cc and extract the archive to any folder on your Windows PC.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="num">2</div>
+          <div class="body">
+            <h3>Launch Enshrouded</h3>
+            <p>Start the game in single-player or host a co-op session. Wait until you are fully loaded into the world.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="num">3</div>
+          <div class="body">
+            <h3>Inject and toggle features</h3>
+            <p>Run the injector, select the Enshrouded process and attach. Use the overlay to enable god mode, fly mode and more.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="kicker">FAQ</div>
+        <h2>Questions from the community</h2>
+        <p>Short answers to the most common questions about the Enshrouded Trainer.</p>
+      </div>
+
+      <div class="faq">
+        <details>
+          <summary>Does the trainer work in co-op?<span class="plus">+</span></summary>
+          <div class="ans">Yes. The trainer attaches to your local game process, so it works in single-player and in co-op sessions you host. Only the host's client is affected by the toggles.</div>
+        </details>
+        <details>
+          <summary>Will it get me banned?<span class="plus">+</span></summary>
+          <div class="ans">Enshrouded is primarily a co-op experience and the trainer is designed for offline and private sessions. Use it only with people who agree to it, and avoid public servers. You are responsible for how you use it.</div>
+        </details>
+        <details>
+          <summary>Does it modify game files?<span class="plus">+</span></summary>
+          <div class="ans">No. The trainer is a native DLL injected at runtime. It does not patch or replace game files, so you can remove it at any time by simply closing the game.</div>
+        </details>
+        <details>
+          <summary>Which Windows versions are supported?<span class="plus">+</span></summary>
+          <div class="ans">Windows 10 and Windows 11, 64-bit. Run the injector as administrator and make sure your antivirus has the folder excluded, since DLL injection is often flagged heuristically.</div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA BANNER -->
+  <section>
+    <div class="wrap">
+      <div class="cta-banner">
+        <h2>Ready to rewrite the rules of Enshrouded?</h2>
+        <p>Download the latest trainer build for Windows and unlock god mode, fly mode and unlimited runes in minutes.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="https://gitscore.cc" target="_blank" rel="noopener">⬇ Get Enshrouded Trainer</a>
+          <a class="btn btn-ghost" href="https://gitscore.cc" target="_blank" rel="no
