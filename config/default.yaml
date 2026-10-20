@@ -1,0 +1,11 @@
+hotkey_prefix: f
+log_level: INFO
+esp:
+  enabled: false
+  show_names: true
+  box_color: "#00FF88"
+aimbot:
+  enabled: false
+  fov_degrees: 8.0
+  smoothing: 0.35
+  target_bone: head
